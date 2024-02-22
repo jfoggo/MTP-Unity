@@ -7,16 +7,29 @@ public class LightSwitch : MonoBehaviour
     private string statusText = "";
     private string renderingSpeed = "";
 
+    private int motionThreshold = 30;   // TODO: change this value
+
+    private Vector3 cameraPosition, lastCameraPosition;
+
     void Start()
     {
         mainCamera = Camera.main;
 
         // Set the initial background color to black
         mainCamera.backgroundColor = Color.black;
+
+        // Set initial position of camera
+        cameraPosition = mainCamera.transform.position;
+        lastCameraPosition = mainCamera.transform.position;
     }
 
     void Update()
     {
+        // Update camera positions
+        //lastCameraPosition = cameraPosition;
+        cameraPosition = mainCamera.transform.position;
+
+        
         // Check for 'd' key press
         if (Input.GetKeyDown(KeyCode.D))
         {
@@ -24,6 +37,14 @@ public class LightSwitch : MonoBehaviour
             isWhite = !isWhite;
             // Display the game rendering speed in milliseconds
             renderingSpeed = "Game Rendering Speed: " + (Time.deltaTime * 1000.0f).ToString("F2") + " ms";
+        }
+        else if (Input.GetKeyDown(KeyCode.S)) {
+            // Move y-1 on keypress S
+            mainCamera.transform.position = new Vector3(cameraPosition.x,cameraPosition.y,cameraPosition.z);
+        }
+        else if (Input.GetKeyDown(KeyCode.W)) {
+            // Reset camer on keypress W
+            mainCamera.transform.position = new Vector3(lastCameraPosition.x,lastCameraPosition.y,lastCameraPosition.z);
         }
     }
 
@@ -62,10 +83,13 @@ public class LightSwitch : MonoBehaviour
         statusStyle.fontSize = 12;
         statusStyle.normal.textColor = Color.green;
 
-        GUI.Label(new Rect(10, 10, 400, 20), statusText, statusStyle);
+        //GUI.Label(new Rect(10, 10, 400, 20), statusText, statusStyle);
+        string positionText = cameraPosition.ToString("F2");
+        if (lastCameraPosition.y-cameraPosition.y >= motionThreshold) positionText += " => Threshold exceeded";
+        GUI.Label(new Rect(10, 10, 400, 20), positionText, statusStyle);
 
         // Display rendering speed text
-        GUI.Label(new Rect(10, 30, 400, 30), renderingSpeed, statusStyle);
+        GUI.Label(new Rect(10, 30, 400, 30), statusText, statusStyle);
 
         // Draw a red rectangle in the top middle of the screen
         GUIStyle boxStyle = new GUIStyle(GUI.skin.box);
