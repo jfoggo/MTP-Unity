@@ -22,3 +22,5 @@ You can use the following methods to run this project:
 3) Or you can open the project in Unity Editor and build it yourself
   - Open folder in Unity Editor: `/MTP-Unity/My project/`
   - Run preview or start build process
+
+HINT: This unity-project is an even more reduced version of our MTP-Unreal-Arduino project. Instead of simulating an actual light source, this project simply changes background color of the scene from black to white (pretending to toggle light on/off), which may lead to lower latencies!
